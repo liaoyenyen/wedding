@@ -84,7 +84,7 @@
           style="background: linear-gradient(135deg, #e9d8c6 0%, #fdfbf7 50%, #d4a373 100%);">
     
     <!-- 主角名稱與中文名 (一行呈現於照片上方，英文左右分散對齊，中文在各自英文正下方置中) -->
-    <div class="z-10 mb-12 mt-10 w-full max-w-lg sm:max-w-2xl md:max-w-3xl px-6">
+    <div class="z-10 mb-12 mt-10 w-full max-w-lg sm:max-w-2xl md:max-w-3xl px-4">
       <div class="grid grid-cols-[1fr_auto_1fr] items-start w-full">
         <!-- 新郎 (英文與中文垂直置中，靠左分散) -->
         <div class="flex flex-col items-center text-center justify-self-start">
@@ -352,6 +352,15 @@
           <input type="text" id="entry_name" required class="w-full bg-stone-50 border border-stone-200/80 rounded-xl px-4 py-3 text-sm focus:outline-hidden focus:ring-1 focus:ring-morandi-gold focus:bg-white transition duration-200 text-stone-700 font-serifTC" placeholder="請輸入姓名">
         </div>
 
+        <!-- 電子信箱 EMAIL -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold tracking-wider text-stone-500">
+            電子信箱 <span class="font-eng text-[10px] text-stone-400 ml-1">EMAIL</span>
+            <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          <input type="email" id="entry_email" required class="w-full bg-stone-50 border border-stone-200/80 rounded-xl px-4 py-3 text-sm focus:outline-hidden focus:ring-1 focus:ring-morandi-gold focus:bg-white transition duration-200 text-stone-700 font-serifTC" placeholder="請輸入電子信箱">
+        </div>
+
         <!-- 參加人數 ATTENDANCE -->
         <div class="space-y-1.5">
           <label class="block text-xs font-semibold tracking-wider text-stone-500">
@@ -360,7 +369,7 @@
           </label>
           <select id="entry_attendance" required onchange="onAttendanceChange(this.value)" class="w-full bg-stone-50 border border-stone-200/80 rounded-xl px-4 py-3 text-sm focus:outline-hidden focus:ring-1 focus:ring-morandi-gold focus:bg-white transition duration-200 text-stone-700 appearance-none font-serifTC" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23888%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>'); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px;">
             <option value="" disabled selected>請選擇人數</option>
-            <option value="0位">0位 (無法出席，致上真摯祝福)</option>
+            <option value="0位">0位 (無法出席)</option>
             <option value="1位">1位</option>
             <option value="2位">2位</option>
             <option value="3位">3位</option>
@@ -394,7 +403,7 @@
           </div>
         </div>
 
-        <!-- 智能連動區塊2: 飲食需求 (下拉選單 "有" 時展開二階/三階) -->
+        <!-- 智能連動區塊2: 飲食需求 -->
         <div class="space-y-3">
           <label class="block text-xs font-semibold tracking-wider text-stone-500">
             飲食需求 <span class="font-eng text-[10px] text-stone-400 ml-1">DIETARY REQUIREMENTS</span>
@@ -469,11 +478,10 @@
     </div>
   </section>
 
-  <!-- 7. 隱藏式 Iframe (Silent Submission Technology) -->
-  <!-- 使用 window.submitted 作為安全判斷，避免因未宣告變數導致 ReferenceError 崩潰 -->
+  <!-- 7. 隱藏式 Iframe (與動態 URLSearchParams 連動) -->
   <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(window.submitted) { showSuccessModal(); }"></iframe>
 
-  <!-- 8. 質感客製化 Modal 對話框 (取代 alert) -->
+  <!-- 8. 質感客製化 Modal 對話框 -->
   <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300">
     <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center shadow-2xl border border-stone-100 transform scale-90 transition-transform duration-300" id="modal-box">
       <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-morandi-sage/15 text-morandi-sage mb-4">
@@ -482,7 +490,7 @@
         </svg>
       </div>
       <h3 class="text-xl font-semibold text-morandi-dark mb-2">謝謝您的回覆！</h3>
-      <p class="text-sm text-stone-500 font-light leading-relaxed mb-6">我們已成功收到您的出席回函，非常期待在 2027 年 11 月 20 日與您共度這個難忘的美好時刻。</p>
+      <p class="text-sm text-stone-500 font-light leading-relaxed mb-6">我們已成功收到您的出席回函，非常期待在 2027 年 11 月 20 日與您共度難忘的美好時刻。</p>
       <button onclick="closeSuccessModal()" class="w-full bg-morandi-gold hover:bg-[#c59262] text-white py-2.5 rounded-xl text-xs font-semibold tracking-wider transition duration-300">
         關閉視窗
       </button>
@@ -497,23 +505,23 @@
 
   <script>
     // ----------------------------------------------------
-    // Google Form 欄位 ID 映射與設置 (嚴格提取並保證初始乾淨全空)
+    // Google Form 欄位 ID 映射與設置 (嚴格提取)
     // ----------------------------------------------------
-    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScuzZpgJk-7qCfTgG-RGsnmtL4CpS0szXFM3jaAzO4Z8jfzYw/formResponse";
+    const GOOGLE_FORM_BASE_URL = "https://docs.google.com/forms/d/e/1FAIpQLScuzZpgJk-7qCfTgG-RGsnmtL4CpS0szXFM3jaAzO4Z8jfzYw/formResponse";
     
-    // 欄位 ID 提取
     const FIELD_IDS = {
       name: "entry.376345622",
+      email: "entry.869031119",            // 將 entry.869031119 對應至 EMAIL 欄位
       attendance: "entry.549928661",
-      needChair: "entry.2066100117",      // 是否需要兒童椅：不需要/需要 (是 (1張)/是 (2張))
-      diet: "entry.1741130732",           // 飲食需求
-      paperInvitation: "entry.1332763778",// 是否需要紙本喜帖：是/否
-      address: "entry.956648357",         // 喜帖寄送地址
-      blessing: "entry.869031119"         // 祝福
+      needChair: "entry.2066100117",      
+      diet: "entry.1741130732",           
+      paperInvitation: "entry.1332763778",
+      address: "entry.956648357",         
+      blessing: "entry.111111111"          // 祝福：如表單上有對應欄位，可在此更換 ID
     };
 
     // ----------------------------------------------------
-    // 手風琴 (Accordion) 展開與摺疊邏輯
+    // 手風琴 (Accordion) 邏輯
     // ----------------------------------------------------
     function toggleAccordion(panelId) {
       const panel = document.getElementById(panelId);
@@ -523,14 +531,13 @@
         panel.style.maxHeight = "0px";
         arrow.style.transform = "rotate(0deg)";
       } else {
-        // 設定平滑過渡的高度
         panel.style.maxHeight = panel.scrollHeight + "px";
         arrow.style.transform = "rotate(180deg)";
       }
     }
 
     // ----------------------------------------------------
-    // 倒數計時器 (THE COUNTDOWN - 目標：2027年11月20日 10:00:00)
+    // 倒數計時器
     // ----------------------------------------------------
     const targetDate = new Date("2027-11-20T10:00:00").getTime();
 
@@ -558,18 +565,13 @@
     }
 
     setInterval(updateCountdown, 1000);
-    updateCountdown(); // 初次載入
+    updateCountdown();
 
     // ----------------------------------------------------
     // 出席回函：智能連動表單互動邏輯
     // ----------------------------------------------------
-    
-    // 1. 參加人數改變事件：連動顯示「是否需要兒童椅」
-    // 只有在賓客填寫人數大於或等於 2 (即 2位、3位、4位) 時才顯示
     function onAttendanceChange(val) {
       const babyChairSection = document.getElementById('baby-chair-section');
-      
-      // 提取人數數字
       const match = val.match(/\d+/);
       const count = match ? parseInt(match[0], 10) : 0;
 
@@ -578,7 +580,6 @@
         babyChairSection.style.opacity = "1";
         babyChairSection.classList.remove('pointer-events-none');
       } else {
-        // 重置為預設
         babyChairSection.style.maxHeight = "0px";
         babyChairSection.style.opacity = "0";
         babyChairSection.classList.add('pointer-events-none');
@@ -587,7 +588,6 @@
       }
     }
 
-    // 二階連動：兒童椅是否需要選擇
     function onChairChange(val) {
       const container = document.getElementById('chair-count-container');
       if (val === ' need' || val === '需要') {
@@ -600,8 +600,6 @@
       }
     }
 
-    // 2. 飲食需求：主下拉選單改變事件
-    // 只有填寫「有」時，才優雅向下展開二階
     function onDietNeedChange(val) {
       const dietOptionContainer = document.getElementById('diet-option-container');
       if (val === '有') {
@@ -610,13 +608,11 @@
       } else {
         dietOptionContainer.style.maxHeight = "0px";
         dietOptionContainer.style.opacity = "0";
-        // 重置
         document.getElementById('entry_diet_choice').value = "忌牛";
         onDietChoiceChange("忌牛");
       }
     }
 
-    // 三階連動：當飲食選項選擇「其他」時，展開手動備註輸入框
     function onDietChoiceChange(val) {
       const otherContainer = document.getElementById('diet-other-input-container');
       const otherInput = document.getElementById('entry_diet_other');
@@ -632,7 +628,6 @@
       }
     }
 
-    // 3. 紙本喜帖改變事件：連動顯示喜帖郵寄地址輸入框
     function onPaperInvitationChange(val) {
       const addressSection = document.getElementById('address-section');
       const addressInput = document.getElementById('entry_address');
@@ -652,13 +647,13 @@
     }
 
     // ----------------------------------------------------
-    // 表單提交流程 (Silent Iframe Submission)
+    // 表單提交流程 (修復同步問題：採用 URL 參數注入 + Iframe 送出)
     // ----------------------------------------------------
     function handleFormSubmit(event) {
       event.preventDefault();
       
-      // 取得表單內容
       const name = document.getElementById('entry_name').value.trim();
+      const email = document.getElementById('entry_email').value.trim();
       const attendance = document.getElementById('entry_attendance').value;
       const needChair = document.getElementById('entry_need_chair').value;
       const chairCount = document.getElementById('entry_chair_count').value;
@@ -669,7 +664,7 @@
       const address = document.getElementById('entry_address').value.trim();
       const blessing = document.getElementById('entry_bless').value.trim();
 
-      // 資料組裝
+      // 計算座椅資料
       let chairResult = "不需要";
       const countMatch = attendance.match(/\d+/);
       const partySize = countMatch ? parseInt(countMatch[0], 10) : 0;
@@ -677,6 +672,7 @@
         chairResult = `是 (${chairCount})`;
       }
 
+      // 計算飲食習慣資料
       let dietResult = "無";
       if (dietNeed === "有") {
         if (dietChoice === "其他") {
@@ -686,35 +682,23 @@
         }
       }
 
-      // 構建並附加到動態虛擬 Form 提交至 hidden_iframe
-      const submitForm = document.createElement('form');
-      submitForm.action = GOOGLE_FORM_ACTION_URL;
-      submitForm.method = 'POST';
-      submitForm.target = 'hidden_iframe';
+      // 改用 URLSearchParams 並加入頁面必須的配置，繞過瀏覽器安全攔截
+      const params = new URLSearchParams();
+      params.append(FIELD_IDS.name, name);
+      params.append(FIELD_IDS.email, email);
+      params.append(FIELD_IDS.attendance, attendance);
+      params.append(FIELD_IDS.needChair, chairResult);
+      params.append(FIELD_IDS.diet, dietResult);
+      params.append(FIELD_IDS.paperInvitation, paperInvitation);
+      params.append(FIELD_IDS.address, paperInvitation === '是' ? address : "不需寄送");
+      params.append(FIELD_IDS.blessing, blessing || "致上真摯祝福！");
+      
+      params.append("fvv", "1");
+      params.append("pageHistory", "0");
 
-      const mappings = [
-        { id: FIELD_IDS.name, val: name },
-        { id: FIELD_IDS.attendance, val: attendance },
-        { id: FIELD_IDS.needChair, val: chairResult },
-        { id: FIELD_IDS.diet, val: dietResult },
-        { id: FIELD_IDS.paperInvitation, val: paperInvitation },
-        { id: FIELD_IDS.address, val: paperInvitation === '是' ? address : "不需寄送" },
-        { id: FIELD_IDS.blessing, val: blessing || "致上真摯祝福！" }
-      ];
-
-      mappings.forEach(item => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = item.id;
-        input.value = item.val;
-        submitForm.appendChild(input);
-      });
-
-      // 設定 submitted 為 true，當隱藏 iframe 載入時觸發 Success Modal
+      // 設定 submitted 狀態，並將生成的安全傳輸 URL 直接賦值給隱藏的 Iframe 進行背景發送
       window.submitted = true;
-      document.body.appendChild(submitForm);
-      submitForm.submit();
-      document.body.removeChild(submitForm);
+      document.getElementById('hidden_iframe').src = GOOGLE_FORM_BASE_URL + "?" + params.toString();
     }
 
     // ----------------------------------------------------
@@ -729,7 +713,6 @@
       box.style.transform = "scale(1)";
     }
 
-    // 表單動畫安全重設
     function closeSuccessModal() {
       const modal = document.getElementById('success-modal');
       const box = document.getElementById('modal-box');
@@ -744,8 +727,9 @@
     function resetFormWithTransitions() {
       document.getElementById('google-form').reset();
       window.submitted = false;
+      document.getElementById('hidden_iframe').src = "about:blank"; // 清空 iframe 地址，防止重複觸發
 
-      // 手動觸發狀態重置動畫
+      // 重置連動面板
       onAttendanceChange("");
       onDietNeedChange("");
       onPaperInvitationChange("");
